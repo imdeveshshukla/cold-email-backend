@@ -1,0 +1,39 @@
+# Virtual environments
+venv/
+env/
+
+# Python cache files
+*.pyc
+__pycache__/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.pid
+*.out
+
+# Environment variables
+.env
+
+# IDE/Editor configurations
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Deployment-specific files
+.dockerignore
+docker-compose.override.yml
+Procfile
+
+# Build artifacts
+*.so
+*.dll
+*.dylib
+*.o
+*.a
