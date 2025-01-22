@@ -15,11 +15,7 @@ class Chain:
             os.environ["GROQ_API_KEY"] = getpass.getpass("Enter API key for Groq: ")
         self.model = ChatGroq(model="llama3-8b-8192")
     
-    def write_mail(self,file,jdlink):
-        loader = WebBaseLoader(jdlink)
-        docs = loader.load()
-        jd = clean_text(docs[0].page_content)
-        
+    def write_mail(self,file,jd):
         loader = PyPDFLoader(
             file,
         )
@@ -47,14 +43,19 @@ class Chain:
             Also don't explain
             If Job description is not found only generate resume template for cold email to any job according to my resume
             Don't print anything other then Email JSON
+            ### If Job description is empty then generate email general purpose for all company
             ### Don't write anything other then email
             ### (NO PREAMBLE)
             """), ("user", """
             JOB_DESCRIPTION:{jd}
             """)]
         )
-        prompt = prompt_template2.invoke({"resume": resume,"jd":jd})
-        res = self.model.invoke(prompt)
-        json_parser = JsonOutputParser()
-        resJson = json_parser.parse(res.content)
-        return resJson
+        try:
+            prompt = prompt_template2.invoke({"resume": resume,"jd":jd})
+            res = self.model.invoke(prompt)
+            json_parser = JsonOutputParser()
+            resJson = json_parser.parse(res.content)
+            return resJson
+        except:
+            print("Some Error Found In LLM")
+            return { "subject":"LLM Issue","content":"" }

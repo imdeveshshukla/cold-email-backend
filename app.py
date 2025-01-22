@@ -3,7 +3,8 @@ import os
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from chains import Chain
-
+from utils import clean_text
+from langchain_community.document_loaders import WebBaseLoader
 app = Flask(__name__)
 
 CORS(app)
@@ -29,7 +30,7 @@ def upload_file():
     
     file = request.files["file"]
     
-    if file.filename == "" or jdLink == "":
+    if file.filename == "":
         return jsonify({"error": "Invalid Input"}), 400
 
     if file and allowed_file(file.filename):
@@ -44,9 +45,15 @@ def upload_file():
             # Example: Print the file size
             # file_size = os.path.getsize(filepath)
             # print(f"File size: {file_size} bytes")
+            jd = ""
             print("Writing Mail")
+            if jdLink != "":
+                print("Jdlink is not null")
+                loader = WebBaseLoader(jdLink)
+                docs = loader.load()
+                jd = clean_text(docs[0].page_content)
             llm = Chain()
-            res = llm.write_mail(filepath,jdLink)
+            res = llm.write_mail(filepath,jd)
 
         finally:
             # Delete the file after processing
