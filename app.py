@@ -36,14 +36,9 @@ def upload_file():
     if file and allowed_file(file.filename):
         secure_name = secure_filename(file.filename)
         filepath = os.path.join(app.config["UPLOAD_FOLDER"], secure_name)
-        # filename = file.filename
-        # filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(filepath)
         
         try:
-            # Process the file (replace with your logic)
-            # Example: Print the file size
-            # file_size = os.path.getsize(filepath)
             # print(f"File size: {file_size} bytes")
             jd = ""
             print("Writing Mail")
